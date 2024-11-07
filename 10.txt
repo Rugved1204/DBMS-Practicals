@@ -1,0 +1,54 @@
+CREATE DATABASE UniversityDB;
+
+USE UniversityDB;
+
+CREATE TABLE Student (
+    Student_Id INT PRIMARY KEY,
+    Student_Name VARCHAR(100),
+    Instructor_Id INT,
+    Student_City VARCHAR(100)
+);
+
+CREATE TABLE Instructor (
+    Instructor_Id INT PRIMARY KEY,
+    Instructor_Name VARCHAR(100),
+    Instructor_City VARCHAR(100),
+    Specialization VARCHAR(100)
+);
+
+INSERT INTO Student (Student_Id, Student_Name, Instructor_Id, Student_City) VALUES 
+(1, 'Alice', 101, 'Mumbai'),
+(2, 'Bob', 102, 'Pune'),
+(3, 'Charlie', NULL, 'Delhi'),
+(4, 'David', 103, 'Chennai'),
+(5, 'Eve', 104, 'Pune');
+
+INSERT INTO Instructor (Instructor_Id, Instructor_Name, Instructor_City, Specialization) VALUES 
+(101, 'Dr. Smith', 'Mumbai', 'Math'),
+(102, 'Dr. Johnson', 'Pune', 'Computer'),
+(103, 'Dr. Williams', 'Chennai', 'Physics'),
+(104, 'Dr. Brown', 'Pune', 'Computer');
+
+SELECT Student_Name, Instructor_Name
+FROM Student
+JOIN Instructor ON Student.Instructor_Id = Instructor.Instructor_Id;
+
+SELECT Student_Name
+FROM Student
+WHERE Instructor_Id IS NULL;
+
+SELECT Student_Name, Instructor_Name
+FROM Student
+LEFT JOIN Instructor ON Student.Instructor_Id = Instructor.Instructor_Id
+WHERE Student.Instructor_Id IS NULL OR Instructor.Instructor_Id IS NULL;
+
+SELECT Student_Name
+FROM Student
+JOIN Instructor ON Student.Instructor_Id = Instructor.Instructor_Id
+WHERE Instructor.Specialization = 'Computer';
+
+CREATE VIEW Pune_Instructors_Students AS
+SELECT COUNT(*) AS Total_Students
+FROM Student
+JOIN Instructor ON Student.Instructor_Id = Instructor.Instructor_Id
+WHERE Instructor.Instructor_City = 'Pune';

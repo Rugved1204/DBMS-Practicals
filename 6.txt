@@ -1,0 +1,52 @@
+CREATE DATABASE db;
+
+USE db;
+
+CREATE TABLE Emp (
+eno INT PRIMARY KEY,
+name VARCHAR(100),
+city VARCHAR(100),
+salary DECIMAL(10, 2)
+);
+
+INSERT INTO Emp (eno, name, city, salary) VALUES
+(101, 'Michael Scott', 'Scranton', 4500),
+(102, 'Dwight Schrute', 'Scranton', 3800),
+(103, 'Jim Halpert', 'Scranton', 4100),
+(104, 'Pam Beesly', 'Scranton', 3200);
+
+DELIMITER //
+
+CREATE PROCEDURE ApplyBonus()
+BEGIN
+    DECLARE v_eno INT;
+    DECLARE v_salary DECIMAL(10, 2);
+    DECLARE done INT DEFAULT FALSE;
+
+    DECLARE emp_cursor CURSOR FOR SELECT eno, salary FROM Emp;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN emp_cursor;
+
+    read_loop: LOOP
+        FETCH emp_cursor INTO v_eno, v_salary;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        IF v_salary > 4000 THEN
+            UPDATE Emp SET salary = salary + 5000 WHERE eno = v_eno;
+        ELSE
+            UPDATE Emp SET salary = salary + 1000 WHERE eno = v_eno;
+        END IF;
+    END LOOP;
+
+    CLOSE emp_cursor;
+END //
+
+DELIMITER ;
+
+CALL ApplyBonus();
+
+SELECT * FROM Emp;

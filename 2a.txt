@@ -1,0 +1,80 @@
+CREATE DATABASE db;
+
+USE db;
+
+CREATE TABLE Student (
+    StudID INT NOT NULL AUTO_INCREMENT,
+    Name VARCHAR(50) NOT NULL,
+    Address VARCHAR(100) NOT NULL,
+    Marks INT NOT NULL,
+    Grade VARCHAR(20),
+    PRIMARY KEY (StudID)
+);
+
+INSERT INTO Student (Name, Address, Marks, Grade) VALUES
+('John Doe', '123 Main St', 85, 'Distinction'),
+('Jane Smith', '456 Oak St', 90, 'First Class'),
+('Mike Johnson', '789 Pine St', 78, 'Second Class');
+
+
+CREATE TABLE Employee (
+    EmployeeID INT NOT NULL,
+    Name VARCHAR(50) NOT NULL,
+    Address VARCHAR(100) NOT NULL,
+    Salary DECIMAL(10, 2) NOT NULL,
+    DateOfJoining DATE NOT NULL,
+    Department VARCHAR(50) NOT NULL,
+    PRIMARY KEY (EmployeeID)
+);
+
+INSERT INTO Employee (EmployeeID, Name, Address, Salary, DateOfJoining, Department) VALUES
+(1, 'Alice Brown', '100 First Ave', 50000, '2020-01-15', 'HR'),
+(2, 'Bob White', '200 Second St', 55000, '2019-03-22', 'Finance'),
+(3, 'Charlie Green', '300 Third Rd', 40000, '2021-06-10', 'IT');
+
+CREATE TABLE Weather (
+    CityID INT NOT NULL,
+    CityName VARCHAR(50) NOT NULL,
+    MinTemp DECIMAL(5, 2) NOT NULL,
+    MaxTemp DECIMAL(5, 2) NOT NULL,
+    PRIMARY KEY (CityID)
+);
+
+INSERT INTO Weather (CityID, CityName, MinTemp, MaxTemp) VALUES
+(1, 'New York', -5.0, 30.0),
+(2, 'Los Angeles', 10.0, 35.0),
+(3, 'Chicago', -10.0, 25.0);
+
+CREATE VIEW JoiningInfo AS
+SELECT EmployeeID, Name, DateOfJoining FROM Employee;
+
+CREATE INDEX idx_student_studid ON Student(StudID);
+CREATE INDEX idx_employee_employeeid ON Employee(EmployeeID);
+CREATE INDEX idx_weather_cityid ON Weather(CityID);
+
+CREATE VIEW MarksInfo AS
+SELECT StudID, Marks FROM Student;
+
+ALTER TABLE Weather RENAME TO WeatherData;
+
+ALTER TABLE WeatherData DROP COLUMN CityName;
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'Student' AND COLUMN_NAME = 'Grade';
+
+ALTER TABLE Student DROP COLUMN Grade;
+
+ALTER TABLE Student ADD Grade VARCHAR(20);
+
+CREATE VIEW DistinctionStudents AS
+SELECT * FROM Student WHERE Grade = 'Distinction';
+
+DROP VIEW IF EXISTS Emp_Info;
+
+CREATE VIEW Emp_Info AS
+SELECT * FROM Employee;
+
+SELECT * FROM Student;
+
+SELECT * FROM Employee;

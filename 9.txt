@@ -1,0 +1,66 @@
+CREATE DATABASE A9trigger;
+
+USE A9trigger;
+
+CREATE TABLE books (
+    accno INT,
+    title VARCHAR(20),
+    author VARCHAR(20),
+    publisher VARCHAR(20),
+    count INT
+);
+
+CREATE TABLE lib_audit (
+    accno INT,
+    title VARCHAR(20),
+    author VARCHAR(20),
+    publisher VARCHAR(20),
+    count INT,
+    action VARCHAR(20)
+);
+
+INSERT INTO books VALUES (1001, 'cn', 'acn', 'pcn', 5);
+INSERT INTO books VALUES (1002, 'dbms', 'adbms', 'pdbms', 10);
+INSERT INTO books VALUES (1003, 'sepm', 'asepm', 'psepm', 7);
+INSERT INTO books VALUES (1004, 'toc', 'atoc', 'ptoc', 20);
+INSERT INTO books VALUES (1005, 'isee', 'isee', 'pisee', 13);
+
+DELIMITER $$
+
+CREATE TRIGGER before_book_delete
+BEFORE DELETE ON books
+FOR EACH ROW
+BEGIN
+    INSERT INTO lib_audit
+    SET action = 'delete',
+        accno = OLD.accno,
+        title = OLD.title,
+        author = OLD.author,
+        publisher = OLD.publisher,
+        count = OLD.count;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER after_book_update
+AFTER UPDATE ON books
+FOR EACH ROW
+BEGIN
+    INSERT INTO lib_audit
+    SET action = 'update',
+        accno = NEW.accno,
+        title = NEW.title,
+        author = NEW.author,
+        publisher = NEW.publisher,
+        count = NEW.count;
+END$$
+
+DELIMITER ;
+
+DELETE FROM books WHERE accno = 1001;
+UPDATE books SET count = 8 WHERE accno = 1003;
+
+SELECT * FROM books;
+SELECT * FROM lib_audit;

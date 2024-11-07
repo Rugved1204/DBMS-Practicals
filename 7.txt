@@ -1,0 +1,35 @@
+CREATE DATABASE db;
+
+USE db;
+
+CREATE TABLE WorkCenters (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    capacity INT NOT NULL
+);
+
+CREATE TABLE WorkCenterStats (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    total_capacity INT DEFAULT 0
+);
+
+INSERT INTO WorkCenterStats (total_capacity) VALUES (0);
+
+DELIMITER //
+
+CREATE TRIGGER trg_after_insert_WorkCenters
+AFTER INSERT ON WorkCenters
+FOR EACH ROW
+BEGIN
+    UPDATE WorkCenterStats
+    SET total_capacity = total_capacity + NEW.capacity;
+END //
+
+DELIMITER ;
+
+INSERT INTO WorkCenters (name, capacity) VALUES
+('Assembly Line A', 100),
+('Assembly Line B', 150),
+('Assembly Line C', 200);
+
+SELECT * FROM WorkCenterStats;

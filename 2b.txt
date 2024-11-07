@@ -1,0 +1,42 @@
+CREATE DATABASE Edb;
+
+USE Edb;
+
+CREATE TABLE Employee (
+    Employee_id INT PRIMARY KEY,
+    First_name VARCHAR(50),
+    Last_name VARCHAR(50),
+    Salary DECIMAL(10, 2),
+    Joining_date DATE,
+    Department VARCHAR(50)
+);
+
+INSERT INTO Employee (Employee_id, First_name, Last_name, Salary, Joining_date, Department) VALUES
+(1, 'Alice', 'Brown', 25000, '2019-02-01', 'IT'),
+(2, 'Bob', 'White', 22000, '2020-06-15', 'HR'),
+(3, 'Carol', 'Black', 28000, '2018-03-22', 'Finance'),
+(4, 'Dave', 'Gray', 18000, '2021-05-10', 'Sales'),
+(5, 'Eve', 'Green', 26000, '2017-07-12', 'Marketing'),
+(6, 'Frank', 'Brown', 29000, '2022-01-30', 'IT'),
+(7, 'Grace', 'White', 15000, '2020-04-19', 'Finance'),
+(8, 'Hank', 'Green', 32000, '2023-08-09', 'HR'),
+(9, 'Ivy', 'Brown', 23000, '2019-11-15', 'Sales'),
+(10, 'Jack', 'Gray', 21000, '2018-09-20', 'Marketing');
+
+SELECT First_name, Last_name FROM Employee;
+
+SELECT DISTINCT Department FROM Employee;
+
+SELECT FIRST_NAME, YEAR(Joining_date) AS Joining_Year, MONTH(Joining_date) AS Joining_Month, DAY(Joining_date) AS Joining_Day FROM Employee;
+
+SELECT * FROM Employee ORDER BY Salary ASC;
+
+SELECT * FROM Employee WHERE First_name LIKE 'A%';
+
+UPDATE Employee SET Salary = Salary + 5000 WHERE Salary < 20000;
+
+UPDATE Employee SET Department = NULL WHERE Employee_id = 4;
+
+SELECT Department, MIN(Salary) AS Min_Salary FROM Employee GROUP BY Department;
+
+SELECT Department, AVG(Salary) AS Avg_Salary FROM Employee GROUP BY Department ORDER BY Avg_Salary ASC;
